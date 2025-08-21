@@ -1,0 +1,21 @@
+spring:
+  r2dbc:
+    url: r2dbc:pool:postgresql://localhost:5432/notification
+    username: lgcms
+    password: 1234
+    properties:
+      serverZoneId: Asia/Seoul
+      connectTimeout: PT30S
+      statementTimeout: PT60S
+      lockTimeout: PT30S
+
+logging:
+  level:
+    org.springframework.r2dbc: DEBUG
+    io.r2dbc.pool: DEBUG
+    io.r2dbc.postgresql: DEBUG
+    org.springframework.data.r2dbc: DEBUG
+    org.springframework.data.r2dbc.core: DEBUG
+
+server:
+  port: 38110
