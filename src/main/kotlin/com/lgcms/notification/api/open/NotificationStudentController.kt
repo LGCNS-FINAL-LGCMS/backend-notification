@@ -10,6 +10,7 @@ import kotlinx.coroutines.flow.Flow
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
+import java.util.UUID
 
 @RestController
 @RequestMapping("/student/notification")
@@ -37,9 +38,9 @@ class NotificationStudentController(
     @DeleteMapping("/read")
     suspend fun readNotification(
         @RequestHeader("X-USER-ID") memberId: Long,
-        @RequestBody request: NotificationReadRequest,
+        @RequestParam notificationId: UUID,
     ): ResponseEntity<BaseResponse<SimpleStringResponse>> {
-        notificationService.readNotification(memberId, request)
+        notificationService.readNotification(memberId, notificationId)
         return ResponseEntity.ok(BaseResponse.ok(SimpleStringResponse("읽음 완료")))
     }
 }
