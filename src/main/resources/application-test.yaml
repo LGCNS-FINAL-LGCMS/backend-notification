@@ -1,0 +1,50 @@
+server:
+  port: 38110
+
+spring:
+  application:
+    name: backend-notification
+  r2dbc:
+    url: r2dbc:pool:postgresql://localhost:5432/notification
+    username: lgcms
+    password: 1234
+    properties:
+      serverZoneId: Asia/Seoul
+      connectTimeout: PT30S
+      statementTimeout: PT60S
+      lockTimeout: PT30S
+
+  kafka:
+    bootstrap-servers: localhost:9094
+
+    listener:
+      ack-mode: manual_immediate
+
+    consumer:
+      group-id: ${spring.application.name}
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      enable-auto-commit: false
+      auto-offset-reset: latest
+      max-poll-records: 10
+      properties:
+        spring.json.trusted.packages: "*"
+        spring.json.use.type.headers: false
+
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      properties:
+        spring.json.add.type.headers: false
+  data:
+    redis:
+      host: localhost
+      port: 6379
+      database: 5
+
+front-routes:
+  student-main-page: /main
+  lecturer-main-page: /userpage/lecturer
+  qna-page: /qna/%d
+  lecture-edit-page: /lessons/manage/%d
+  leveltest-report-page: /member/student/report/%d
