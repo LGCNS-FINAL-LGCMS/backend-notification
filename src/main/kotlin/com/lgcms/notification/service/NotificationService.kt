@@ -9,6 +9,7 @@ import com.lgcms.notification.domain.NotificationEntityFactory
 import com.lgcms.notification.domain.NotificationType
 import com.lgcms.notification.event.kafka.dto.NotificationEventRequest
 import com.lgcms.notification.repository.NotificationRepository
+import kotlinx.coroutines.flow.Flow
 import org.springframework.stereotype.Service
 
 @Service
@@ -16,6 +17,7 @@ class NotificationService(
     private val notificationRepository: NotificationRepository,
     private val notificationEntityFactory: NotificationEntityFactory,
     private val objectMapper: ObjectMapper,
+    private val sseBroadcaster: NotificationSSEBroadcaster,
 ) {
     suspend fun convertEventAndSave(
         request: KafkaEvent<*>
@@ -42,5 +44,9 @@ class NotificationService(
             else -> throw BaseException(NotificationError.NO_SUCH_NOTIFICATION_TYPE)
         }
         return notificationRepository.save(notificationEntityFactory.create(notificationRequest))
+    }
+
+    suspend fun subscribe(memberId: Long): Flow<NotificationEntity> {
+        return sseBroadcaster.subscribe(memberId)
     }
 }
