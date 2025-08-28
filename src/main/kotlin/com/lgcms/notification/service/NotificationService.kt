@@ -68,4 +68,11 @@ class NotificationService(
     suspend fun sendNotification(request: KafkaEvent<NotificationEventRequest.QnaCreated>) {
         notificationProducer.sendNotificationEvent(request)
     }
+
+    fun getServerStatus(): Map<String, Any> {
+        return mapOf(
+            "activeSubscribers" to sseBroadcaster.getActiveSubscriberCount(),
+            "status" to "RUNNING"
+        )
+    }
 }

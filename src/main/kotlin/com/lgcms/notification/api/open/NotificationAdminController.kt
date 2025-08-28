@@ -21,4 +21,9 @@ class NotificationAdminController(
         return ResponseEntity.ok()
             .body(BaseResponse.ok(SimpleStringResponse("알림이 전송되었습니다.")))
     }
+
+    @GetMapping("/status")
+    fun getServerStatus(): ResponseEntity<Map<String, Any>> {
+        return ResponseEntity.ok(notificationService.getServerStatus())
+    }
 }
