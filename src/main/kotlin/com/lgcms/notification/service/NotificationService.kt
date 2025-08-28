@@ -9,6 +9,7 @@ import com.lgcms.notification.domain.NotificationEntity
 import com.lgcms.notification.domain.NotificationEntityFactory
 import com.lgcms.notification.domain.NotificationType
 import com.lgcms.notification.event.kafka.dto.NotificationEventRequest
+import com.lgcms.notification.event.kafka.producer.NotificationProducer
 import com.lgcms.notification.repository.NotificationRepository
 import kotlinx.coroutines.flow.Flow
 import org.springframework.stereotype.Service
@@ -20,6 +21,7 @@ class NotificationService(
     private val notificationEntityFactory: NotificationEntityFactory,
     private val objectMapper: ObjectMapper,
     private val sseBroadcaster: NotificationSSEBroadcaster,
+    private val notificationProducer: NotificationProducer,
 ) {
     suspend fun convertEventAndSave(
         request: KafkaEvent<*>
@@ -61,5 +63,9 @@ class NotificationService(
         val notifications = notificationRepository.findByMemberIdAndId(memberId, request.notificationId)
         if (notifications.isNotEmpty())
             notificationRepository.deleteById(request.notificationId)
+    }
+
+    suspend fun sendNotification(request: KafkaEvent<NotificationEventRequest.QnaCreated>) {
+        notificationProducer.sendNotificationEvent(request)
     }
 }
