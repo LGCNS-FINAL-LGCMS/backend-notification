@@ -1,9 +1,12 @@
 package com.lgcms.notification.api.open
 
+import com.lgcms.notification.api.dto.NotificationListResponse
+import com.lgcms.notification.common.dto.BaseResponse
 import com.lgcms.notification.domain.NotificationEntity
 import com.lgcms.notification.service.NotificationService
 import kotlinx.coroutines.flow.Flow
 import org.springframework.http.MediaType
+import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestHeader
 import org.springframework.web.bind.annotation.RequestMapping
@@ -22,5 +25,13 @@ class NotificationStudentController(
         @RequestHeader("X-USER-ID") memberId: Long,
     ): Flow<NotificationEntity> {
         return notificationService.subscribe(memberId)
+    }
+
+    @GetMapping()
+    suspend fun getUserNotifications(
+        @RequestHeader("X-USER-ID") memberId: Long,
+    ): ResponseEntity<BaseResponse<NotificationListResponse>> {
+        return ResponseEntity.ok()
+            .body(BaseResponse.ok(NotificationListResponse(notificationService.findById(memberId))))
     }
 }

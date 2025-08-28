@@ -49,4 +49,8 @@ class NotificationService(
     suspend fun subscribe(memberId: Long): Flow<NotificationEntity> {
         return sseBroadcaster.subscribe(memberId)
     }
+
+    suspend fun findById(memberId: Long): List<NotificationEntity> {
+        return notificationRepository.findByMemberId(memberId)
+    }
 }
