@@ -13,4 +13,10 @@ interface NotificationRepository : CoroutineCrudRepository<NotificationEntity, U
         ORDER BY n.created_at DESC
         """)
     suspend fun findByMemberId(memberId: Long): List<NotificationEntity>
+    @Query("""
+        SELECT *
+        FROM notifications AS n
+        WHERE n.member_id = :memberId AND n.id = :notificationId
+        """)
+    suspend fun findByMemberIdAndId(memberId: Long, notificationId: UUID): List<NotificationEntity>
 }

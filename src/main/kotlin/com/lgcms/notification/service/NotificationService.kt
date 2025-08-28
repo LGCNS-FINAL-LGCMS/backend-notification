@@ -1,6 +1,7 @@
 package com.lgcms.notification.service
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.lgcms.notification.api.dto.NotificationReadRequest
 import com.lgcms.notification.common.dto.exception.BaseException
 import com.lgcms.notification.common.dto.exception.NotificationError
 import com.lgcms.notification.common.kafka.dto.KafkaEvent
@@ -11,6 +12,7 @@ import com.lgcms.notification.event.kafka.dto.NotificationEventRequest
 import com.lgcms.notification.repository.NotificationRepository
 import kotlinx.coroutines.flow.Flow
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 
 @Service
 class NotificationService(
@@ -52,5 +54,12 @@ class NotificationService(
 
     suspend fun findById(memberId: Long): List<NotificationEntity> {
         return notificationRepository.findByMemberId(memberId)
+    }
+
+    @Transactional
+    suspend fun readNotification(memberId: Long, request: NotificationReadRequest) {
+        val notifications = notificationRepository.findByMemberIdAndId(memberId, request.notificationId)
+        if (notifications.isNotEmpty())
+            notificationRepository.deleteById(request.notificationId)
     }
 }
