@@ -5,7 +5,7 @@ spring:
   application:
     name: backend-notification
   r2dbc:
-    url: r2dbc:pool:postgresql://localhost:5432/notification
+    url: r2dbc:pool:postgresql://localhost:5432/testdb
     username: lgcms
     password: 1234
     properties:
