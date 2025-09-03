@@ -48,3 +48,11 @@ front-routes:
   qna-page: /qna/%d
   lecture-edit-page: /lessons/manage/%d
   leveltest-report-page: /member/student/report/%d
+management:
+  endpoints:
+    web:
+      exposure:
+        include: prometheus,health,info
+  metrics:
+    tags:
+      application: ${spring.application.name}
