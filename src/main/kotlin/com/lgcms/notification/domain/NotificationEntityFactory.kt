@@ -56,7 +56,7 @@ class NotificationEntityFactory(
 
             is NotificationEventRequest.LevelTestReportRequested -> NotificationEntity(
                 memberId = request.memberId,
-                notificationType = NotificationType.LEVELTEST_REPORT_REQUEST,
+                notificationType = NotificationType.LEVELTEST_REPORT_REQUESTED,
                 content = "레벨 테스트 레포트 페이지가 완성되었습니다",
                 webPath = String.format(leveltestReportPage, request.studentReportId),
             )
