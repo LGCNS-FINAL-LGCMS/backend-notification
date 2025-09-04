@@ -43,7 +43,7 @@ class NotificationService(
             NotificationType.ENCODING_STATUS.toString() ->
                 objectMapper.convertValue(request.data, NotificationEventRequest.EncodingStatus::class.java)
 
-            NotificationType.LEVELTEST_REPORT_REQUEST.toString() ->
+            NotificationType.LEVELTEST_REPORT_REQUESTED.toString() ->
                 objectMapper.convertValue(request.data, NotificationEventRequest.LevelTestReportRequested::class.java)
 
             else -> throw BaseException(NotificationError.NO_SUCH_NOTIFICATION_TYPE)
