@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - 'main'
-      - 'LB-443/trace'
 
 env:
   REGISTRY: ghcr.io
@@ -73,7 +72,7 @@ jobs:
       - name: Extract App Name & Version
         run: |
           echo "APP_NAME=$(./gradlew -q getAppName)" >> ${GITHUB_ENV};
-          echo "APP_VERSION=$(./gradlew -q getAppVersion)-alpha" >> ${GITHUB_ENV};
+          echo "APP_VERSION=$(./gradlew -q getAppVersion)" >> ${GITHUB_ENV};
 
       - name: Set Docker Image version
         run: |

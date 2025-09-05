@@ -16,10 +16,7 @@ class NotificationConsumer(
 ) {
     private val logger = LoggerFactory.getLogger(NotificationConsumer::class.java)
 
-    @KafkaListener(
-        topics = ["NOTIFICATION"],
-        containerFactory = "defaultFactory",
-    )
+    @KafkaListener(topics = ["NOTIFICATION"])
     suspend fun handleNotificationEvent(
         @Payload kafkaEvent: KafkaEvent<*>,
     ) {

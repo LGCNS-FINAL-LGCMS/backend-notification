@@ -27,7 +27,7 @@ sealed class NotificationEventRequest {
     data class EncodingStatus(
         val memberId: Long,
         val lectureName: String,
-        val lectureId: Long,
+        val lectureId: String,
         val status: String,
     ) : NotificationEventRequest()
 

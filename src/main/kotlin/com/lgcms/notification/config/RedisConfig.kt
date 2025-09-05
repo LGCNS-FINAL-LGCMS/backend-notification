@@ -1,10 +1,15 @@
 package com.lgcms.notification.config
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import io.lettuce.core.resource.ClientResources
+import io.lettuce.core.tracing.MicrometerTracing
+import io.micrometer.observation.ObservationRegistry
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.data.redis.connection.RedisConnectionFactory
+import org.springframework.data.redis.connection.RedisStandaloneConfiguration
+import org.springframework.data.redis.connection.lettuce.LettuceClientConfiguration
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory
 import org.springframework.data.redis.core.RedisTemplate
 import org.springframework.data.redis.listener.RedisMessageListenerContainer
@@ -20,10 +25,13 @@ class RedisConfig(
 ) {
 
     @Bean
-    fun redisConnectionFactory(): RedisConnectionFactory {
-        val connectionFactory = LettuceConnectionFactory(redisHost, redisPort)
-        connectionFactory.database = redisDatabase
-        return connectionFactory
+    fun redisConnectionFactory(clientResources: ClientResources): RedisConnectionFactory {
+        val clientCOnfig = LettuceClientConfiguration.builder()
+            .clientResources(clientResources)
+            .build()
+        val redisConfig = RedisStandaloneConfiguration(redisHost, redisPort)
+        redisConfig.database = redisDatabase
+        return LettuceConnectionFactory(redisConfig, clientCOnfig)
     }
 
     @Bean
@@ -42,5 +50,12 @@ class RedisConfig(
         val container = RedisMessageListenerContainer()
         container.setConnectionFactory(connectionFactory)
         return container
+    }
+
+    @Bean
+    fun clientResources(observationRegistry: ObservationRegistry): ClientResources {
+        return ClientResources.builder()
+            .tracing(MicrometerTracing(observationRegistry, "redis-cache"))
+            .build()
     }
 }
