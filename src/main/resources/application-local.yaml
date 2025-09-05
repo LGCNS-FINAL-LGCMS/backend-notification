@@ -49,6 +49,9 @@ front-routes:
   lecture-edit-page: /lessons/manage/%d
   leveltest-report-page: /member/student/report/%d
 management:
+  otlp:
+    tracing:
+      endpoint: http://localhost:4317
   endpoints:
     web:
       exposure:
@@ -56,3 +59,8 @@ management:
   metrics:
     tags:
       application: ${spring.application.name}
+  tracing:
+    sampling:
+      probability: 1.0
+    propagation:
+      type: b3
