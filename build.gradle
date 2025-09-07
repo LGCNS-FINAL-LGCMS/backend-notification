@@ -6,7 +6,7 @@ plugins {
 }
 
 group = 'com.lgcms'
-version = '0.2'
+version = '0.3'
 description = 'Notification project for lgcms'
 
 java {
@@ -49,6 +49,12 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310")
     implementation("org.springframework.boot:spring-boot-starter-data-redis")
+
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+    runtimeOnly 'io.micrometer:micrometer-registry-prometheus'
+
+    implementation 'io.micrometer:micrometer-tracing-bridge-otel' // 트레이싱
+    implementation 'io.opentelemetry:opentelemetry-exporter-otlp' // otel exporter
 }
 
 kotlin {
