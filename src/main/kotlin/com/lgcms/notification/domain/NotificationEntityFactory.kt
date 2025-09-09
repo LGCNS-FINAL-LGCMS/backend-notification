@@ -22,44 +22,48 @@ class NotificationEntityFactory(
             is NotificationEventRequest.MemberJoined -> NotificationEntity(
                 memberId = request.memberId,
                 notificationType = NotificationType.MEMBER_JOINED,
-                content = "${request.nickname}님 회원가입을 축하합니다.",
+                content = "${cutName(request.nickname)}님 회원가입을 축하해요",
                 webPath = studentMainPage,
             )
 
             is NotificationEventRequest.RoleModified -> NotificationEntity(
                 memberId = request.memberId,
                 notificationType = NotificationType.ROLE_MODIFIED,
-                content = "${request.nickname}님 ${request.memberRoleName}가 되었습니다",
+                content = "${cutName(request.nickname)}님 ${request.memberRoleName}가 됐어요",
                 webPath = lecturerMainPage,
             )
 
             is NotificationEventRequest.QnaCreated -> NotificationEntity(
                 memberId = request.memberId,
                 notificationType = NotificationType.QNA_CREATED,
-                content = "${request.lectureName}에서 질문이 등록되었습니다",
+                content = "${cutName(request.lectureName)}에서 질문이 등록됐어요",
                 webPath = String.format(qnaPage, request.qnaId),
             )
 
             is NotificationEventRequest.QnaAnswered -> NotificationEntity(
                 memberId = request.memberId,
                 notificationType = NotificationType.QNA_ANSWERED,
-                content = "${request.questionTitle} 질문에 답변이 등록되었습니다",
+                content = "${cutName(request.questionTitle)} 질문에 답변이 등록됐어요",
                 webPath = String.format(qnaPage, request.qnaId),
             )
 
             is NotificationEventRequest.EncodingStatus -> NotificationEntity(
                 memberId = request.memberId,
                 notificationType = NotificationType.ENCODING_STATUS,
-                content = "${request.lectureName} 강의 영상 업로드를 ${request.status}헀습니다",
+                content = "${cutName(request.lectureName)} 강의 영상 업로드를 ${request.status}했어요",
                 webPath = String.format(lectureEditPage, request.lectureId),
             )
 
             is NotificationEventRequest.LevelTestReportRequested -> NotificationEntity(
                 memberId = request.memberId,
                 notificationType = NotificationType.LEVELTEST_REPORT_REQUESTED,
-                content = "레벨 테스트 레포트 페이지가 완성되었습니다",
+                content = "레벨 테스트 레포트가 작성됐어요",
                 webPath = String.format(leveltestReportPage, request.studentReportId),
             )
         }
+    }
+
+    fun cutName(name: String): String {
+        return if (name.length > 10) name.substring(0, 10) + "..." else name
     }
 }
