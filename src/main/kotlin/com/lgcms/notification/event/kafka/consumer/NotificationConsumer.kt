@@ -6,6 +6,7 @@ import com.lgcms.notification.service.NotificationService
 import kotlinx.coroutines.runBlocking
 import org.slf4j.LoggerFactory
 import org.springframework.kafka.annotation.KafkaListener
+import org.springframework.kafka.support.Acknowledgment
 import org.springframework.messaging.handler.annotation.Payload
 import org.springframework.stereotype.Component
 
@@ -19,6 +20,7 @@ class NotificationConsumer(
     @KafkaListener(topics = ["NOTIFICATION"])
     suspend fun handleNotificationEvent(
         @Payload kafkaEvent: KafkaEvent<*>,
+        ack: Acknowledgment
     ) {
         try {
             val notificationEntity = notificationService.convertEventAndSave(kafkaEvent)
@@ -26,6 +28,7 @@ class NotificationConsumer(
             runBlocking {
                 notificationPublisher.publishNotification(notificationEntity)
             }
+            ack.acknowledge()
         } catch (e: Exception) {
             logger.error(
                 "알림 처리 중 오류 발생: eventId={}, error={}",
